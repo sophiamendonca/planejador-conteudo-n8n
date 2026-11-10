@@ -28,13 +28,12 @@ Usei dois negócios fictícios (uma cafeteria de bairro e uma loja de roupas fem
 | 16 a 20 | Loja de roupas, versão final |
 
 - **Problema 1, invenções da IA:** na primeira versão, a IA citou detalhes que eu não tinha informado (um ingrediente, um diferencial do produto e um evento).
-- **Correção:** acrescentei regras à instrução para usar apenas as informações fornecidas. [Resultado: as invenções sumiram / diminuíram / continuaram em tal ponto.]
+- **Correção:** acrescentei regras à instrução para usar apenas as informações fornecidas. Resultado: as invenções que eu tinha identificado não apareceram mais nas 5 linhas seguintes.
 - **Problema 2, campo que não chegava na IA:** o campo "Público" tinha acento no formulário e a expressão do prompt não, então o público-alvo chegava vazio. Corrigi a expressão e rodei de novo.
-- **Observação:** na rodada da loja, a IA repetiu as hashtags dentro da legenda. [Corrigi com uma regra / deixei como limitação.]
 
 ## Limitações
 
-- Testes feitos com poucos exemplos e um negócio fictício.
+- Testes feitos com poucos exemplos e dois negócio fictício.
 - Não medi o tempo economizado em relação ao planejamento manual, então não faço afirmações sobre isso.
 - A IA não responde sempre igual, e o resultado pode variar.
 - Os posts precisam de revisão humana antes de publicar.
@@ -43,7 +42,7 @@ Usei dois negócios fictícios (uma cafeteria de bairro e uma loja de roupas fem
 ## Como usar
 
 1. Instale o Node.js (versões 20.19 a 24) e rode `npx n8n`.
-2. No n8n, menu do fluxo → **Import from File** → `planejador-conteudo.json`.
+2. No n8n, menu do fluxo → **Import from File** → `planejador de conteudo com IA.json`.
 3. Crie uma credencial **Google Gemini (PaLM) API** com a sua própria chave.
 4. Crie uma Data table `posts_planejamento` com as colunas de texto `dia`, `formato`, `ideia`, `legenda`, `hashtags` e `sugestao_visual`, e selecione-a no último nó.
 5. Execute o fluxo e preencha o formulário.
