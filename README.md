@@ -13,7 +13,7 @@ Fluxo de automação no n8n que recebe os dados de um negócio por um formulári
 5. **Data table (Insert row):** grava cada post (dia, formato, ideia, legenda, hashtags e sugestão visual) em uma linha da tabela.
 
 ![Formulário](formulario.png)
-![Saída da IA](saida.ia.pnga.pn)
+![Saída da IA](saida.ia.png)
 ![Tabela com os posts](tabela.png)
 
 ## O que testei
