@@ -1,0 +1,275 @@
+{
+  "name": "Planejador de conteúdo com IA",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Planejador de conteúdo semanal",
+        "formDescription": "Preencha os dados do negócio e receba um planejamento de 5 posts para a semana",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Segmento",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Público",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Objetivo",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Engajar seguidores"
+                  },
+                  {
+                    "option": "Divulgar um produto"
+                  },
+                  {
+                    "option": "Gerar contatos e vendas"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Tema",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        0
+      ],
+      "id": "315c90f4-f319-49b1-9328-a195d2cd8456",
+      "name": "On form submission",
+      "webhookId": "b48593a0-1a7e-44d8-8a99-0ce04a5696f1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-flash-lite-latest",
+          "mode": "list",
+          "cachedResultName": "Gemini Flash-Lite Latest"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Segmento do negócio: {{ $json.Segmento }}\nPúblico-alvo: {{ $json.Público }}\nObjetivo da semana: {{ $json.Objetivo }}\nTema ou novidade da semana: {{ $json.Tema }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "builtInTools": {},
+        "options": {
+          "systemMessage": "Você é um social media experiente. Receba os dados de um negócio e monte um planejamento de 5 posts (segunda a sexta) para o Instagram. Responda SOMENTE em JSON, neste formato: {\"posts\": [{\"dia\": \"segunda\", \"formato\": \"carrossel\", \"ideia\": \"...\", \"legenda\": \"...\", \"hashtags\": \"...\", \"sugestao_visual\": \"...\"}]} Regras: - Exatamente 5 posts, um por dia útil. - O formato deve ser um destes: carrossel, reels, foto ou stories. - A legenda deve ter até 280 caracteres, em português, num tom adequado ao público. - Use de 3 a 5 hashtags, separadas por espaço. - Não invente preços, promoções, horários ou dados que não foram informados.  - Use apenas as informações fornecidas. Não cite ingredientes, produtos, eventos, promoções ou diferenciais que não estejam nos dados. - Se faltar informação para uma ideia, proponha algo genérico em vez de inventar."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        192
+      ],
+      "id": "7f6ae59e-a60e-4d20-9700-e49d8d7d6a9e",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "ERkSls1umBjiqh6a",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const texto = $input.first().json.content.parts[0].text;\nconst limpo = texto.replace(/```json|```/g, \"\").trim();\nconst dados = JSON.parse(limpo);\nreturn [{ json: { posts: dados.posts } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        192
+      ],
+      "id": "89c7befe-564d-4108-994f-60fa1ee84504",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "posts",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1.1,
+      "position": [
+        496,
+        192
+      ],
+      "id": "beadc618-a3a9-4305-95b9-616072958abb",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "ncEg2MuUfh0zguCm",
+          "mode": "list",
+          "cachedResultName": "posts_planejamento",
+          "cachedResultUrl": "/projects/cwVnsUjPbropTvEu/datatables/ncEg2MuUfh0zguCm"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "dia": "={{ $json.dia }}",
+            "formato": "={{ $json.formato }}",
+            "ideia": "={{ $json.ideia }}",
+            "legenda": "={{ $json.legenda }}",
+            "hashtags": "={{ $json.hashtags }}",
+            "sugestao_visual": "={{ $json.sugestao_visual }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "dia",
+              "displayName": "dia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "formato",
+              "displayName": "formato",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ideia",
+              "displayName": "ideia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "legenda",
+              "displayName": "legenda",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "hashtags",
+              "displayName": "hashtags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "sugestao_visual",
+              "displayName": "sugestao_visual",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        704,
+        192
+      ],
+      "id": "b968725f-8320-4192-ad3e-9e2461052de8",
+      "name": "Insert row"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c4abd12a-5ac0-411c-87e1-9bea670984d2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f8673d92f418e9f3e1ffe8ee6fbc0370eee9f378c2ccd4cad5b36995a8645b5f"
+  },
+  "nodeGroups": [],
+  "id": "i7mJ58HDXRVuExNu",
+  "tags": []
+} 
