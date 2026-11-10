@@ -58,4 +58,5 @@ Usei dois negócios fictícios (uma cafeteria de bairro e uma loja de roupas fem
 ## Próximos passos
 
 - Medir o tempo de planejamento manual em comparação ao fluxo (incluindo a revisão), com mais de um negócio.
-- [outro passo que você realmente queira fazer, por exemplo: uma etapa de revisão antes de gravar na tabela]
+- Campo de tom de voz no formulário (descontraído, profissional, acolhedor).
+- Enviar o resultado para uma planilha ou e-mail, em vez de só a tabela do n8n.
